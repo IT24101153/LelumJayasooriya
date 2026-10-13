@@ -8,6 +8,8 @@ const languageColors = {
   React: '#61DAFB',
   Python: '#3776AB',
   Java: '#E76F00',
+  Kotlin: '#7F52FF',
+  'C#': '#8E5CB0',
   PHP: '#777BB4',
   HTML: '#E34F26',
   CSS: '#1572B6',

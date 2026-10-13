@@ -12,6 +12,9 @@ export function HeroSection({ onNavigate }) {
               src={heroProfile.image}
               alt={`${heroProfile.name} portrait`}
               className="hero-portrait-image"
+              width="640"
+              height="626"
+              decoding="async"
             />
           </div>
         </div>

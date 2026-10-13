@@ -31,18 +31,19 @@ export function WorkSection({ onViewAllWeb, onViewAllApps }) {
               className={`projects-entry-card projects-entry-card--${entry.accent} scroll-reveal`}
               onClick={entry.onOpen}
             >
-              <div className="projects-entry-top">
+              {/* phrasing content only: block elements are not allowed inside a button */}
+              <span className="projects-entry-top">
                 <span className="projects-entry-count">
                   {entry.count} {entry.count === 1 ? 'project' : 'projects'}
                 </span>
                 <span className="projects-entry-arrow" aria-hidden="true">
                   &rarr;
                 </span>
-              </div>
-              <div className="projects-entry-body">
-                <h3 className="projects-entry-title">{entry.title}</h3>
-                <p className="projects-entry-description">{entry.description}</p>
-              </div>
+              </span>
+              <span className="projects-entry-body">
+                <span className="projects-entry-title">{entry.title}</span>
+                <span className="projects-entry-description">{entry.description}</span>
+              </span>
               <span className="projects-entry-cta">View all</span>
             </button>
           ))}

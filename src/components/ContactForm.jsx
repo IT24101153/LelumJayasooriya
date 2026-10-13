@@ -8,6 +8,14 @@ export function ContactForm() {
 
   const onSubmit = async (event) => {
     event.preventDefault();
+
+    // no key configured yet (see .env.example): fail clearly instead of posting a bad request
+    if (!ACCESS_KEY) {
+      setStatus('error');
+      setMessage('The contact form is not connected yet. Please reach out by email or WhatsApp below.');
+      return;
+    }
+
     setStatus('sending');
     setMessage('');
 
@@ -30,7 +38,7 @@ export function ContactForm() {
         setStatus('error');
         setMessage(data.message || 'Something went wrong. Please try again.');
       }
-    } catch (error) {
+    } catch {
       setStatus('error');
       setMessage('Network error. Please try again or use email.');
     }
@@ -39,7 +47,7 @@ export function ContactForm() {
   const isSending = status === 'sending';
 
   return (
-    <form className="contact-form" onSubmit={onSubmit} noValidate>
+    <form className="contact-form" onSubmit={onSubmit}>
       <div className="contact-form-row">
         <div className="contact-field">
           <label htmlFor="contact-name">Name</label>
@@ -72,7 +80,7 @@ export function ContactForm() {
           id="contact-message"
           name="message"
           rows="5"
-          placeholder="Tell me about the role or what you'd like to discuss."
+          placeholder="Tell me about the role or project you have in mind."
           required
           disabled={isSending}
         />

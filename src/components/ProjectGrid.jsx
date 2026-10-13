@@ -1,3 +1,4 @@
+// Each card is one <button>, so everything inside it has to be phrasing content (spans).
 export function ProjectGrid({ projects, onOpen, eagerFirstImage = false }) {
   return (
     <div className="bento-grid">
@@ -12,37 +13,37 @@ export function ProjectGrid({ projects, onOpen, eagerFirstImage = false }) {
           aria-label={`Open details for ${project.title}`}
           onClick={() => onOpen(project)}
         >
-          <div className="bento-top">
+          <span className="bento-top">
             {(project.year || project.type) && (
               <span className="bento-meta">
                 {[project.year, project.type].filter(Boolean).join(' · ')}
               </span>
             )}
-          </div>
+          </span>
 
-          <div className="bento-content">
-            <h3>{project.title}</h3>
-            {project.subtitle && <p className="bento-subtitle">{project.subtitle}</p>}
-            <p>{project.description}</p>
-            <div className="tags">
+          <span className="bento-content">
+            <span className="bento-title">{project.title}</span>
+            {project.subtitle && <span className="bento-subtitle">{project.subtitle}</span>}
+            <span className="bento-description">{project.description}</span>
+            <span className="tags">
               {project.tags.map((tag) => (
                 <span key={tag} className="tag">
                   {tag}
                 </span>
               ))}
-            </div>
+            </span>
             <span className="bento-cta">
               View details
               <span aria-hidden="true">&rarr;</span>
             </span>
-          </div>
+          </span>
 
-          <div className="bento-visual">
+          <span className="bento-visual">
             <ProjectVisual
               project={project}
               eager={eagerFirstImage && index === 0}
             />
-          </div>
+          </span>
         </button>
       ))}
     </div>
@@ -67,13 +68,13 @@ export function ProjectVisual({ project, eager = false }) {
   const label = placeholder.label ?? project.title;
 
   return (
-    <div
+    <span
       className="bento-placeholder"
       role="img"
       aria-label={`${project.title} placeholder`}
       style={{ background: `linear-gradient(135deg, ${from} 0%, ${to} 100%)` }}
     >
       <span className="bento-placeholder-label">{label}</span>
-    </div>
+    </span>
   );
 }

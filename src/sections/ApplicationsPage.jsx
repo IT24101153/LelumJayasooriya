@@ -1,19 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { ProjectGrid } from '../components/ProjectGrid';
 import { ProjectPreviewModal } from '../components/ProjectPreviewModal';
 import { applicationProjects } from '../data/siteContent';
 
 export function ApplicationsPage({ onBack }) {
   const [selectedProject, setSelectedProject] = useState(null);
-
-  useEffect(() => {
-    const id = window.requestAnimationFrame(() => {
-      document
-        .querySelectorAll('.applications-page .scroll-reveal:not(.visible)')
-        .forEach((el) => el.classList.add('visible'));
-    });
-    return () => window.cancelAnimationFrame(id);
-  }, []);
 
   return (
     <>

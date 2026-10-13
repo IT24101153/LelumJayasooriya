@@ -28,7 +28,7 @@ export function Navbar({ menuOpen, setMenuOpen, activeSection, onNavigate }) {
                 <a
                   href={`#${item.id}`}
                   className={isActive ? 'is-current' : ''}
-                  aria-current={isActive ? 'page' : undefined}
+                  aria-current={isActive ? 'location' : undefined}
                   onClick={(event) => onNavigate(event, `#${item.id}`)}
                 >
                   {item.label}

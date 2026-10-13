@@ -1,14 +1,15 @@
 :root {
     --primary-color: #000000;
     --primary-hover: #333333;
-    --secondary-color: #1d1d1f;
     --accent-color: #007aff;
     --brand-accent: #007aff;
+    /* darker blue for small accent text, where --brand-accent falls short of 4.5:1 contrast */
+    --brand-accent-text: #0066cc;
     --brand-accent-soft: rgba(0, 122, 255, 0.16);
     --background-color: #f5f5f7;
     --surface-color: #ffffff;
     --text-color: #1d1d1f;
-    --text-light: #86868b;
+    --text-light: #6e6e73;
     --glass-bg: rgba(255, 255, 255, 0.45);
     --glass-border: rgba(255, 255, 255, 0.5);
     --border-radius: 30px;
@@ -16,21 +17,18 @@
     --shadow-hover: 0 20px 40px rgba(0, 0, 0, 0.1);
     --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     --inverse-text: #ffffff;
-    --footer-text-secondary: rgba(255, 255, 255, 0.6);
     --footer-border: rgba(255, 255, 255, 0.1);
-    --cursor-border: rgba(0, 0, 0, 0.5);
-    --cursor-hover-bg: rgba(0, 0, 0, 0.1);
     --section-bg: #f5f5f7;
     --whatsapp-color: #25d366;
-    --whatsapp-color-hover: #1da851;
+    --cursor-arrow: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='22' height='22' viewBox='0 0 22 22'><path d='M3,2 L3,17.5 L7,14 L9.8,20 L12.2,19 L9.5,13 L15,13 Z' fill='black' stroke='white' stroke-width='1.4' stroke-linejoin='round' stroke-linecap='round'/></svg>");
 }
 
 @media (prefers-color-scheme: dark) {
     :root {
         --primary-color: #ffffff;
         --primary-hover: #e0e0e0;
-        --secondary-color: #f5f5f7;
         --accent-color: #0a84ff;
+        --brand-accent-text: #2997ff;
         --background-color: #000000;
         --surface-color: #1d1d1f;
         --text-color: #f5f5f7;
@@ -40,11 +38,9 @@
         --shadow-soft: 0 10px 30px rgba(255, 255, 255, 0.05);
         --shadow-hover: 0 20px 40px rgba(255, 255, 255, 0.1);
         --inverse-text: #000000;
-        --footer-text-secondary: rgba(0, 0, 0, 0.6);
         --footer-border: rgba(0, 0, 0, 0.1);
-        --cursor-border: rgba(255, 255, 255, 0.5);
-        --cursor-hover-bg: rgba(255, 255, 255, 0.1);
         --section-bg: #111111;
+        --cursor-arrow: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='22' height='22' viewBox='0 0 22 22'><path d='M3,2 L3,17.5 L7,14 L9.8,20 L12.2,19 L9.5,13 L15,13 Z' fill='white' stroke='black' stroke-width='1.4' stroke-linejoin='round' stroke-linecap='round'/></svg>");
     }
 }
 
@@ -64,6 +60,11 @@ img {
     display: block;
 }
 
+/* buttons do not inherit the page font by default */
+button {
+    font-family: inherit;
+}
+
 a:focus-visible,
 button:focus-visible {
     outline: 2px solid var(--brand-accent);
@@ -71,21 +72,16 @@ button:focus-visible {
     border-radius: 6px;
 }
 
+/*
+ * macOS-style arrow cursor. Set once on the root and inherited, so the children of a
+ * link or button share its cursor; text fields keep the browser's I-beam.
+ */
 @media (hover: hover) and (pointer: fine) {
-    * {
-        cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='22' height='22' viewBox='0 0 22 22'><path d='M3,2 L3,17.5 L7,14 L9.8,20 L12.2,19 L9.5,13 L15,13 Z' fill='black' stroke='white' stroke-width='1.4' stroke-linejoin='round' stroke-linecap='round'/></svg>") 3 2, auto;
+    html {
+        cursor: var(--cursor-arrow) 3 2, auto;
     }
-    a, button, [role='button'], .bento-item, .project-filter, .menu-toggle, input, textarea, label {
-        cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='22' height='22' viewBox='0 0 22 22'><path d='M3,2 L3,17.5 L7,14 L9.8,20 L12.2,19 L9.5,13 L15,13 Z' fill='black' stroke='white' stroke-width='1.4' stroke-linejoin='round' stroke-linecap='round'/></svg>") 3 2, pointer;
-    }
-}
-
-@media (hover: hover) and (pointer: fine) and (prefers-color-scheme: dark) {
-    * {
-        cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='22' height='22' viewBox='0 0 22 22'><path d='M3,2 L3,17.5 L7,14 L9.8,20 L12.2,19 L9.5,13 L15,13 Z' fill='white' stroke='black' stroke-width='1.4' stroke-linejoin='round' stroke-linecap='round'/></svg>") 3 2, auto;
-    }
-    a, button, [role='button'], .bento-item, .project-filter, .menu-toggle, input, textarea, label {
-        cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='22' height='22' viewBox='0 0 22 22'><path d='M3,2 L3,17.5 L7,14 L9.8,20 L12.2,19 L9.5,13 L15,13 Z' fill='white' stroke='black' stroke-width='1.4' stroke-linejoin='round' stroke-linecap='round'/></svg>") 3 2, pointer;
+    a, button, [role='button'], label {
+        cursor: var(--cursor-arrow) 3 2, pointer;
     }
 }
 
@@ -147,11 +143,12 @@ body {
     line-height: 1.5;
     overflow-x: hidden; /* Prevent horizontal scroll */
     -webkit-font-smoothing: antialiased;
-    overflow: hidden; /* Initially hidden for loader */
 }
 
+/* scroll-locked: splash screen or mobile menu is up. modal-open: a project dialog is open. */
+body.scroll-locked,
 body.modal-open {
-    overflow: hidden !important;
+    overflow: hidden;
 }
 
 /* Custom Scrollbar */
@@ -172,12 +169,6 @@ body.modal-open {
     ::-webkit-scrollbar-thumb {
         background: #3a3a3c;
     }
-}
-
-/* Custom Cursor (legacy dot/outline disabled in favor of native macOS arrow cursor) */
-.cursor-dot,
-.cursor-outline {
-    display: none !important;
 }
 
 /* Navigation */
@@ -260,7 +251,7 @@ body.modal-open {
 }
 
 .nav-links a.is-current {
-    color: var(--brand-accent);
+    color: var(--brand-accent-text);
 }
 
 .btn-primary {
@@ -400,14 +391,14 @@ body.modal-open {
     gap: 0.5rem;
     font-size: 1.05rem;
     font-weight: 500;
-    color: #1d9bf0;
+    color: var(--brand-accent-text);
     text-decoration: none;
     padding: 0.5rem 0.25rem;
     transition: var(--transition);
 }
 
 .hero-cta:hover {
-    color: #0a7bd1;
+    color: var(--brand-accent);
 }
 
 .hero-cta span {
@@ -506,6 +497,12 @@ body.modal-open {
         transition: none !important;
         scroll-behavior: auto !important;
     }
+
+    /* these start hidden and rely on an animation to appear, so show them outright */
+    .fade-in-up {
+        opacity: 1;
+        transform: none;
+    }
 }
 
 /* Bento Grid */
@@ -531,7 +528,6 @@ body.modal-open {
     border: none;
     text-align: left;
     width: 100%;
-    cursor: pointer;
     background: var(--surface-color);
     border-radius: var(--border-radius);
     padding: 2rem;
@@ -555,18 +551,30 @@ body.modal-open {
 .bento-item.medium { grid-column: span 1; }
 
 .bento-content {
+    display: block;
     z-index: 2;
     position: relative;
 }
 
-.bento-content h3 {
-    font-size: clamp(1.35rem, 2.4vw, 1.75rem);
-    margin-bottom: 0.5rem;
-    word-break: break-word;
+/* the card is a <button>, so its text is built from spans rather than headings and paragraphs */
+.bento-title,
+.bento-subtitle,
+.bento-description,
+.bento-content .tags {
+    display: block;
 }
 
-.bento-content p {
-    color: var(--text-light);
+.bento-title {
+    font-size: clamp(1.35rem, 2.4vw, 1.75rem);
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    word-break: break-word;
+    color: #ffffff;
+}
+
+.bento-description {
+    font-size: 0.85rem;
+    color: #ffffff;
     margin-bottom: 1rem;
     line-height: 1.55;
 }
@@ -621,11 +629,6 @@ body.modal-open {
     background: linear-gradient(180deg, rgba(15, 15, 15, 0.3) 0%, rgba(15, 15, 15, 0.86) 100%);
 }
 
-.bento-content h3,
-.bento-content p {
-    color: #ffffff;
-}
-
 .bento-top {
     position: relative;
     z-index: 2;
@@ -648,8 +651,9 @@ body.modal-open {
     -webkit-backdrop-filter: blur(10px);
 }
 
-.bento-content .bento-subtitle {
+.bento-subtitle {
     font-size: 0.95rem;
+    line-height: 1.55;
     color: rgba(255, 255, 255, 0.72);
     margin-bottom: 0.65rem;
 }
@@ -717,6 +721,8 @@ body.modal-open {
     overflow: hidden;
     display: grid;
     grid-template-columns: 1fr 1.05fr;
+    /* cap the row at the dialog height so the content column scrolls instead of being clipped */
+    grid-template-rows: minmax(0, 1fr);
     box-shadow: 0 30px 80px rgba(0, 0, 0, 0.4);
     transform-origin: center;
     opacity: 0;
@@ -1010,7 +1016,6 @@ body.modal-open {
     justify-content: center;
     background: rgba(0, 0, 0, 0.6);
     color: #ffffff;
-    cursor: pointer;
     z-index: 2;
     transition: background 0.2s ease, transform 0.2s ease;
 }
@@ -1274,49 +1279,8 @@ body.modal-open {
 }
 
 /* Skills Section */
-.skills-wrapper {
-    display: grid;
-    grid-template-columns: 1fr 1.5fr;
-    gap: 4rem;
-    align-items: center;
-}
-
 .grey-bg {
     background-color: var(--section-bg);
-}
-
-.skill-card {
-    background: var(--surface-color);
-    padding: 2rem;
-    border-radius: 20px;
-    box-shadow: var(--shadow-soft);
-    margin-bottom: 1.5rem;
-    transition: var(--transition);
-}
-
-.skill-card h4 {
-    margin-bottom: 0.5rem;
-    color: var(--text-color);
-}
-
-.skill-card p {
-    color: var(--text-light);
-}
-
-.skill-card:hover {
-    transform: translateY(-5px);
-}
-
-.skill-card .icon {
-    font-size: 2rem;
-    margin-bottom: 1rem;
-    display: block;
-}
-
-.skills-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1.5rem;
 }
 
 /* About Section */
@@ -1339,7 +1303,7 @@ body.modal-open {
 }
 
 .about-kicker {
-    color: var(--brand-accent);
+    color: var(--brand-accent-text);
     font-size: 0.85rem;
     font-weight: 700;
     letter-spacing: 0.12em;
@@ -1349,12 +1313,6 @@ body.modal-open {
 
 .about-intro .section-title {
     margin-bottom: 1.25rem;
-}
-
-.about-intro p {
-    color: var(--text-light);
-    max-width: 62ch;
-    margin-bottom: 1.1rem;
 }
 
 .about-cards {
@@ -1386,10 +1344,6 @@ body.modal-open {
     color: var(--text-light);
 }
 
-/*
- * Bento: summary spans the top, the two short cards stack in the left column,
- * and the tall pixel-perfect card fills the right column beside them.
- */
 /*
  * Bento: summary, clean code, and duration stack down the left column;
  * the tall pixel-perfect card runs the full height of the right column.
@@ -1877,53 +1831,45 @@ footer {
     transform: translateY(0);
 }
 
-/* Mobile Menu Button */
+/* Mobile Menu Button (shown at the mobile breakpoint below) */
 .menu-toggle {
     display: none;
     flex-direction: column;
-    justify-content: space-between;
-    width: 30px;
-    height: 21px;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    width: 44px;
+    height: 44px;
+    margin-right: -0.75rem; /* lines the bars up with the container edge */
     background: transparent;
-    border: 1px solid rgba(0, 0, 0, 0.1);
+    border: 0;
     border-radius: 12px;
-    padding: 0.45rem;
-    cursor: pointer;
-    z-index: 1001;
+    padding: 0;
 }
 
-.menu-toggle span {
+.menu-toggle .bar {
     display: block;
-    width: 100%;
-    height: 3px;
+    width: 20px;
+    height: 2px;
     background-color: var(--text-color);
-    border-radius: 3px;
-    transition: all 0.3s ease;
+    border-radius: 2px;
+    transition: transform 0.3s ease, opacity 0.3s ease;
 }
 
-.menu-toggle.is-active span:nth-child(1) {
-    transform: translateY(9px) rotate(45deg);
+.menu-toggle.is-active .bar:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
 }
 
-.menu-toggle.is-active span:nth-child(2) {
+.menu-toggle.is-active .bar:nth-child(2) {
     opacity: 0;
 }
 
-.menu-toggle.is-active span:nth-child(3) {
-    transform: translateY(-9px) rotate(-45deg);
+.menu-toggle.is-active .bar:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
-    /* Hide custom cursor on touch devices */
-    .cursor-dot, .cursor-outline {
-        display: none;
-    }
-
-    * {
-        cursor: auto; /* Restore default cursor */
-    }
-
     .container {
         padding: 0 1.25rem;
     }
@@ -1941,9 +1887,50 @@ footer {
         padding-bottom: 1.5rem;
     }
 
-    /* Navigation hidden on mobile */
-    .menu-toggle,
+    /* Navigation: the links collapse into a panel that drops down from the navbar */
+    .navbar {
+        padding: 0.75rem 0;
+    }
+
+    .menu-toggle {
+        display: flex;
+    }
+
     .nav-links {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0;
+        padding: 0.25rem 1.25rem 0.75rem;
+        background: var(--surface-color);
+        border-bottom: 1px solid rgba(125, 125, 125, 0.18);
+        box-shadow: 0 24px 40px rgba(0, 0, 0, 0.12);
+        opacity: 0;
+        visibility: hidden; /* also keeps the closed links out of the tab order */
+        transform: translateY(-8px);
+        transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s;
+    }
+
+    .nav-links.active {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+    }
+
+    .nav-links li + li {
+        border-top: 1px solid rgba(125, 125, 125, 0.16);
+    }
+
+    .nav-links a {
+        display: block;
+        padding: 0.95rem 0;
+        font-size: 1.05rem;
+    }
+
+    .nav-links a::after {
         display: none;
     }
 
@@ -1993,6 +1980,7 @@ footer {
 
     .project-preview-modal {
         grid-template-columns: 1fr;
+        grid-template-rows: none; /* stacked: the whole dialog scrolls instead */
         max-height: 90dvh;
         overflow-y: auto;
         overscroll-behavior: contain;
@@ -2025,12 +2013,6 @@ footer {
         justify-content: center;
     }
 
-    /* Skills Section */
-    .skills-wrapper {
-        grid-template-columns: 1fr;
-        gap: 2rem;
-    }
-
     /* About Section */
     .about-stats-grid {
         grid-template-columns: 1fr;
@@ -2061,10 +2043,6 @@ footer {
 
     .pixel-card {
         min-height: 340px;
-    }
-
-    .skills-grid {
-        grid-template-columns: 1fr;
     }
 
     /* Footer */
@@ -2102,13 +2080,6 @@ footer {
     }
 }
 
-@keyframes navItemIn {
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
 /* Project Filters */
 .project-filters {
     display: flex;
@@ -2126,7 +2097,6 @@ footer {
     color: var(--text-light);
     font-size: 0.9rem;
     font-weight: 500;
-    cursor: pointer;
     transition: var(--transition);
 }
 
@@ -2173,7 +2143,6 @@ footer {
     border-radius: 28px;
     padding: 2.25rem 2.25rem 2rem;
     text-align: left;
-    cursor: pointer;
     box-shadow: var(--shadow-soft);
     transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
                 box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1);
@@ -2224,7 +2193,7 @@ footer {
     padding: 0.35rem 0.85rem;
     border-radius: 999px;
     background: var(--brand-accent-soft);
-    color: var(--brand-accent);
+    color: var(--brand-accent-text);
     font-size: 0.8rem;
     font-weight: 600;
     letter-spacing: 0.02em;
@@ -2317,7 +2286,6 @@ footer {
     color: var(--text-light);
     font-size: 0.9rem;
     font-weight: 500;
-    cursor: pointer;
     transition: var(--transition);
     margin-bottom: 1.5rem;
 }
@@ -2388,7 +2356,7 @@ footer {
 .tool-group-title {
     font-size: 1.1rem;
     font-weight: 600;
-    color: var(--brand-accent);
+    color: var(--brand-accent-text);
     text-transform: uppercase;
     letter-spacing: 0.1em;
     margin-bottom: 1.25rem;
@@ -2524,7 +2492,7 @@ footer {
 .contact-field input::placeholder,
 .contact-field textarea::placeholder {
     color: var(--text-light);
-    opacity: 0.7;
+    opacity: 1;
 }
 
 .contact-field input:hover,
@@ -2565,8 +2533,6 @@ footer {
 
 .contact-form-actions .btn-primary.large {
     border: 0;
-    cursor: pointer;
-    font-family: inherit;
 }
 
 .contact-form-actions .btn-primary.large:disabled {
@@ -2584,7 +2550,7 @@ footer {
 }
 
 .contact-form-status.is-success {
-    color: var(--brand-accent);
+    color: var(--brand-accent-text);
     font-weight: 500;
 }
 

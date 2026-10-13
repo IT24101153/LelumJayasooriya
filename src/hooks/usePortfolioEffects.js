@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 export function usePortfolioEffects({
   loaderHidden,
   menuOpen,
+  currentPage,
   setLoaderProgress,
   setLoaderHidden,
   setActiveSection,
@@ -11,10 +12,10 @@ export function usePortfolioEffects({
 }) {
   useEffect(() => {
     const body = document.body;
-    body.style.overflow = loaderHidden && !menuOpen ? 'auto' : 'hidden';
+    body.classList.toggle('scroll-locked', !loaderHidden || menuOpen);
 
     return () => {
-      body.style.overflow = 'auto';
+      body.classList.remove('scroll-locked');
     };
   }, [loaderHidden, menuOpen]);
 
@@ -30,13 +31,16 @@ export function usePortfolioEffects({
     };
 
     const trackImages = () => {
-      const images = Array.from(document.images);
+      // lazy images below the fold may never start loading, so they must not hold the splash
+      const images = Array.from(document.images).filter((img) => img.loading !== 'lazy');
 
       if (images.length === 0) {
         if (document.readyState === 'complete') {
           finish();
         } else {
-          window.addEventListener('load', () => finish(), { once: true });
+          const onLoad = () => finish();
+          window.addEventListener('load', onLoad, { once: true });
+          cleanups.push(() => window.removeEventListener('load', onLoad));
         }
         return;
       }
@@ -84,70 +88,6 @@ export function usePortfolioEffects({
   }, [setLoaderHidden, setLoaderProgress]);
 
   useEffect(() => {
-    const cursorDot = document.querySelector('.cursor-dot');
-    const cursorOutline = document.querySelector('.cursor-outline');
-    const canUseCustomCursor = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
-    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-    if (!cursorDot || !cursorOutline || !canUseCustomCursor || reduceMotion) {
-      return undefined;
-    }
-
-    let mouseX = 0;
-    let mouseY = 0;
-    let outlineX = 0;
-    let outlineY = 0;
-    let rafId;
-
-    const handleMouseMove = (event) => {
-      mouseX = event.clientX;
-      mouseY = event.clientY;
-      cursorDot.style.left = `${mouseX}px`;
-      cursorDot.style.top = `${mouseY}px`;
-    };
-
-    const animateOutline = () => {
-      outlineX += (mouseX - outlineX) * 0.1;
-      outlineY += (mouseY - outlineY) * 0.1;
-
-      cursorOutline.style.left = `${outlineX}px`;
-      cursorOutline.style.top = `${outlineY}px`;
-
-      rafId = window.requestAnimationFrame(animateOutline);
-    };
-
-    const isInteractive = (target) =>
-      target instanceof Element &&
-      !!target.closest('a, button, .bento-item, .skill-card');
-
-    const handleMouseOver = (event) => {
-      if (isInteractive(event.target)) {
-        cursorOutline.classList.add('hover');
-      }
-    };
-
-    const handleMouseOut = (event) => {
-      if (isInteractive(event.target)) {
-        cursorOutline.classList.remove('hover');
-      }
-    };
-
-    window.addEventListener('mousemove', handleMouseMove, { passive: true });
-    document.addEventListener('mouseover', handleMouseOver);
-    document.addEventListener('mouseout', handleMouseOut);
-    animateOutline();
-
-    return () => {
-      window.removeEventListener('mousemove', handleMouseMove);
-      document.removeEventListener('mouseover', handleMouseOver);
-      document.removeEventListener('mouseout', handleMouseOut);
-      if (rafId) {
-        window.cancelAnimationFrame(rafId);
-      }
-    };
-  }, []);
-
-  useEffect(() => {
     const cursorLoader = document.querySelector('.cursor-loader');
     if (!cursorLoader || !window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
       return undefined;
@@ -163,12 +103,6 @@ export function usePortfolioEffects({
   }, []);
 
   useEffect(() => {
-    const revealElements = document.querySelectorAll('.scroll-reveal');
-
-    if (!revealElements.length) {
-      return undefined;
-    }
-
     const revealObserver = new IntersectionObserver(
       (entries, observer) => {
         entries.forEach((entry) => {
@@ -181,12 +115,21 @@ export function usePortfolioEffects({
       { root: null, rootMargin: '0px 0px -120px 0px', threshold: 0.1 }
     );
 
-    revealElements.forEach((element) => {
-      revealObserver.observe(element);
-    });
+    const observePending = () => {
+      document.querySelectorAll('.scroll-reveal:not(.visible)').forEach((element) => {
+        revealObserver.observe(element);
+      });
+    };
+
+    observePending();
+
+    // pages and filtered project cards mount after the first render, so pick those up too
+    const mutationObserver = new MutationObserver(observePending);
+    mutationObserver.observe(document.body, { childList: true, subtree: true });
 
     return () => {
       revealObserver.disconnect();
+      mutationObserver.disconnect();
     };
   }, []);
 
@@ -211,7 +154,7 @@ export function usePortfolioEffects({
     return () => {
       window.removeEventListener('scroll', setActiveNavLink);
     };
-  }, [sectionIds, setActiveSection]);
+  }, [sectionIds, setActiveSection, currentPage]);
 
   useEffect(() => {
     const handleEscape = (event) => {
@@ -226,11 +169,19 @@ export function usePortfolioEffects({
       }
     };
 
+    const handleOutsidePress = (event) => {
+      if (event.target instanceof Element && !event.target.closest('.navbar')) {
+        setMenuOpen(false);
+      }
+    };
+
     document.addEventListener('keydown', handleEscape);
+    document.addEventListener('pointerdown', handleOutsidePress);
     window.addEventListener('resize', handleResize);
 
     return () => {
       document.removeEventListener('keydown', handleEscape);
+      document.removeEventListener('pointerdown', handleOutsidePress);
       window.removeEventListener('resize', handleResize);
     };
   }, [setMenuOpen]);

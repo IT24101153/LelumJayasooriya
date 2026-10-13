@@ -1,8 +1,12 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { ProjectVisual } from './ProjectGrid';
+
+const FOCUSABLE_SELECTOR = 'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
 export function ProjectPreviewModal({ project, onClose, mediaVariant = 'cover', downloadLabel = 'Download' }) {
   const [isClosing, setIsClosing] = useState(false);
+  const modalRef = useRef(null);
+  const closeButtonRef = useRef(null);
 
   const close = useCallback(() => {
     if (!project || isClosing) return;
@@ -16,18 +20,55 @@ export function ProjectPreviewModal({ project, onClose, mediaVariant = 'cover', 
   useEffect(() => {
     if (!project) return undefined;
 
-    const onEscape = (event) => {
-      if (event.key === 'Escape') close();
+    const onKeyDown = (event) => {
+      if (event.key === 'Escape') {
+        close();
+        return;
+      }
+
+      const modal = modalRef.current;
+      if (event.key !== 'Tab' || !modal) return;
+
+      // keep Tab cycling inside the dialog while it is open
+      const focusable = modal.querySelectorAll(FOCUSABLE_SELECTOR);
+      if (focusable.length === 0) return;
+
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      const active = document.activeElement;
+      const isOutside = !modal.contains(active);
+
+      if (event.shiftKey && (active === first || isOutside)) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && (active === last || isOutside)) {
+        event.preventDefault();
+        first.focus();
+      }
     };
 
     document.body.classList.add('modal-open');
-    document.addEventListener('keydown', onEscape);
+    document.addEventListener('keydown', onKeyDown);
 
     return () => {
       document.body.classList.remove('modal-open');
-      document.removeEventListener('keydown', onEscape);
+      document.removeEventListener('keydown', onKeyDown);
     };
   }, [project, close]);
+
+  // move focus into the dialog on open, and hand it back to the card that opened it on close
+  useEffect(() => {
+    if (!project) return undefined;
+
+    const previouslyFocused = document.activeElement;
+    closeButtonRef.current?.focus();
+
+    return () => {
+      if (previouslyFocused instanceof HTMLElement) {
+        previouslyFocused.focus();
+      }
+    };
+  }, [project]);
 
   if (!project) return null;
 
@@ -52,10 +93,12 @@ export function ProjectPreviewModal({ project, onClose, mediaVariant = 'cover', 
       onClick={close}
     >
       <div
+        ref={modalRef}
         className={`project-preview-modal${isClosing ? ' is-closing' : ''}`}
         onClick={(event) => event.stopPropagation()}
       >
         <button
+          ref={closeButtonRef}
           type="button"
           className="project-preview-close"
           aria-label="Close details"

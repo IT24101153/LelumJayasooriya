@@ -42,7 +42,7 @@ export const webProjects = [
     tags: ['HTML', 'CSS', 'JavaScript', 'Google Maps API', 'SEO'],
     liveUrl: 'https://goldenislandtours.com',
     repoUrl: null,
-    image: '/uploads/images/Sites/site1.png'
+    image: '/uploads/images/Sites/site1.webp'
   },
   {
     slug: 'techanologia',
@@ -72,7 +72,7 @@ export const webProjects = [
     tags: ['WordPress', 'LMS', 'API Integrations', 'RBAC', 'Data Encryption'],
     liveUrl: 'https://techanologia.com',
     repoUrl: null,
-    image: '/uploads/images/Sites/site2.png'
+    image: '/uploads/images/Sites/site2.webp'
   },
   {
     slug: 'ecobhoomikl',
@@ -102,7 +102,7 @@ export const webProjects = [
     tags: ['WordPress', 'WooCommerce', 'E-commerce', 'Gallery'],
     liveUrl: 'https://ecobhoomikl.com',
     repoUrl: null,
-    image: '/uploads/images/Sites/site3.png'
+    image: '/uploads/images/Sites/site3.webp'
   }
 ];
 
@@ -131,8 +131,8 @@ export const applicationProjects = [
       { group: 'Practices', items: ['App packaging', 'Human Interface Guidelines'] }
     ],
     tags: ['macOS', 'Swift', 'Productivity', 'Native'],
-    image: '/uploads/images/Apps/app1.png',
-    repoUrl: null,
+    image: '/uploads/images/Apps/app1.webp',
+    repoUrl: 'https://github.com/lelumjayasooriya/Focus',
     downloadUrl:
       'https://mysliit-my.sharepoint.com/:u:/g/personal/it24101153_my_sliit_lk/IQB7z-EnikFtR6S9qEI6qOY3Aa5A5SF45ruvfJVY3mkcOuE?e=tAEbwu'
   },
@@ -160,7 +160,7 @@ export const applicationProjects = [
       { group: 'Practices', items: ['REST API consumption', 'Async data handling'] }
     ],
     tags: ['macOS', 'Swift', 'Finance', 'Native'],
-    image: '/uploads/images/Apps/app2.png',
+    image: '/uploads/images/Apps/app2.webp',
     repoUrl: null,
     downloadUrl:
       'https://mysliit-my.sharepoint.com/:u:/g/personal/it24101153_my_sliit_lk/IQDEcMD8B9aKQpQjpWRSzacyAcFGwfXcj-XR4LiUdGk1BEM?e=sEVoSo'
@@ -169,42 +169,44 @@ export const applicationProjects = [
 
 export const githubProfileUrl = 'https://github.com/lelumjayasooriya';
 
-// TODO: replace these placeholders with real repositories.
+// Listed newest first. `language` is the repository's primary language on GitHub.
 export const githubRepos = [
   {
-    name: 'repository-name-01',
+    name: 'RescueSriLanka',
     year: '2026',
-    description: 'Short one-line description of what this repository does and why you built it.',
+    description:
+      'AI-powered disaster response and resource coordination system for Sri Lanka, with an ASP.NET Core API, a React admin dashboard, and a Flutter app.',
+    language: 'C#',
+    url: 'https://github.com/IT24101153/RescueSriLanka-SEF_KDY_SE_02'
+  },
+  {
+    name: 'KadeYamu',
+    year: '2026',
+    description: 'Android app for managing grocery lists and shopping at neighbourhood stores.',
+    language: 'Kotlin',
+    url: 'https://github.com/lelumjayasooriya/KadeYamu'
+  },
+  {
+    name: 'Focus',
+    year: '2026',
+    description: 'Native macOS app with a minimal, distraction-free interface for deep work sessions.',
     language: 'Swift',
-    url: githubProfileUrl
+    url: 'https://github.com/lelumjayasooriya/Focus'
   },
   {
-    name: 'repository-name-02',
+    name: 'Saranya-Jewellery',
     year: '2025',
-    description: 'Short one-line description of what this repository does and why you built it.',
+    description:
+      'Full-stack MERN management system for a jewellery business: inventory, orders, loyalty programs, and staff portals.',
     language: 'JavaScript',
-    url: githubProfileUrl
+    url: 'https://github.com/IT24101153/Saranya-Jewellery'
   },
   {
-    name: 'repository-name-03',
-    year: '2025',
-    description: 'Short one-line description of what this repository does and why you built it.',
-    language: 'React',
-    url: githubProfileUrl
-  },
-  {
-    name: 'repository-name-04',
+    name: 'CleanXpert',
     year: '2024',
-    description: 'Short one-line description of what this repository does and why you built it.',
-    language: 'Python',
-    url: githubProfileUrl
-  },
-  {
-    name: 'repository-name-05',
-    year: '2024',
-    description: 'Short one-line description of what this repository does and why you built it.',
+    description: 'First-year project: a mobile app for controlling an automated home vacuum cleaner.',
     language: 'Java',
-    url: githubProfileUrl
+    url: 'https://github.com/lelumjayasooriya/CleanXpert'
   }
 ];
 
@@ -212,7 +214,7 @@ export const heroProfile = {
   name: 'Lelum Jayasooriya',
   verified: true,
   title: 'Web & Application Software Developer',
-  ctaLabel: 'Start a project request',
+  ctaLabel: 'Get in touch',
   ctaTarget: '#contact',
   image: '/uploads/images/hero.webp'
 };
