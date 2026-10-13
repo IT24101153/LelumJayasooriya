@@ -26,6 +26,7 @@ import {
   SiTailwindcss,
   SiTypescript
 } from 'react-icons/si';
+import { VscAzure } from 'react-icons/vsc';
 import { toolGroups } from '../data/siteContent';
 
 const toolIconMap = {
@@ -45,6 +46,7 @@ const toolIconMap = {
   postgres: { Icon: SiPostgresql, color: '#4169E1' },
   wordpress: { Icon: FaWordpress, color: '#21759B' },
   aws: { Icon: FaAws, color: '#FF9900' },
+  azure: { Icon: VscAzure, color: '#0089D6' },
   docker: { Icon: FaDocker, color: '#2496ED' },
   git: { Icon: FaGitAlt, color: '#F05032' },
   github: { Icon: FaGithub, mono: true },

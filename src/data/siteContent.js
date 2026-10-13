@@ -355,6 +355,7 @@ export const toolGroups = [
     title: 'DevOps',
     tools: [
       { id: 'aws', name: 'AWS' },
+      { id: 'azure', name: 'Azure Cloud' },
       { id: 'docker', name: 'Docker' },
       { id: 'git', name: 'Git' },
       { id: 'github', name: 'GitHub' }
